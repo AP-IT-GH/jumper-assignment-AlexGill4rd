@@ -7,17 +7,16 @@ using UnityEngine;
 
 public class DemoAgent : Agent
 {
-    public Transform Target;
-    public Transform GreenZone;
-    public float speedMultiplier = 0.1f;
-    public float rotationMultiplier = 5;
-
-    bool targetReached = false;
-    bool targetHidden = false;
+    public float speedMultiplier = 1;
+    public float jumpForce = 10f;
+    public LayerMask obstacleLayer;
+    RayPerceptionSensorComponent3D rayPerceptionSensor;
+    Rigidbody rb;
 
     void Start()
     {
-
+        rb = GetComponent<Rigidbody>();
+        rayPerceptionSensor = GetComponent<RayPerceptionSensorComponent3D>();
     }
 
     public override void OnEpisodeBegin()
@@ -27,60 +26,33 @@ public class DemoAgent : Agent
             this.transform.localPosition = new Vector3(0, 0.5f, 3.29f);
             this.transform.localRotation = Quaternion.identity;
         }
-        float maxZoneX = 5f; // Maximale waarde voor x-positie
-        float maxZoneZ = 4f; // Maximale waarde voor z-positie
-
-        Target.localPosition = new Vector3(Random.value * maxZoneX, 0.5f, Random.value * maxZoneZ);
-        targetReached = false;
-        targetHidden = false;
-        Target.gameObject.SetActive(true); // Zorg ervoor dat het doel zichtbaar is bij het starten van een nieuwe episode
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(this.transform.localPosition);
+        // Add observations from the Ray Perception Sensor 3D
+        sensor.AddObservation(rayPerceptionSensor.ObservationStacks);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        if (!targetReached && !targetHidden)
+        Vector3 controlSignal = Vector3.zero;
+        controlSignal.y = actions.ContinuousActions[0];
+        transform.Translate(controlSignal * speedMultiplier);
+
+        // Reward the agent based on the observation
+        if (GetCumulativeReward() <= 0f)
         {
-            // Acties, size = 2
-            Vector3 controlSignal = Vector3.zero;
-            controlSignal.z = actions.ContinuousActions[0];
-            transform.Translate(controlSignal * speedMultiplier);
-
-            transform.Rotate(0.0f, rotationMultiplier * actions.ContinuousActions[1], 0.0f);
-
-            // Beloningen
-            float distanceToTarget = Vector3.Distance(this.transform.localPosition, Target.localPosition);
-
-            // Doel bereikt
-            if (distanceToTarget < 1.42f)
-            {
-                // Verberg het doel en markeer dat het doel is geraakt
-                SetReward(0.5f);
-                Target.gameObject.SetActive(false);
-                targetReached = true;
-            }
+            SetReward(-0.001f);
         }
         else
         {
-            // Naar groene zone bewegen
-            Vector3 moveDirection = (GreenZone.position - transform.position).normalized;
-            transform.Translate(moveDirection * speedMultiplier);
-
-            // Beloningen voor het bereiken van de groene zone
-            if (Vector3.Distance(transform.position, GreenZone.position) < 1.0f)
-            {
-                SetReward(1.0f);
-                EndEpisode();
-            }
+            SetReward(0.001f);
         }
 
-        // Van het platform gevallen?
         if (this.transform.localPosition.y < 0)
         {
+            SetReward(-1f);
             EndEpisode();
         }
     }
