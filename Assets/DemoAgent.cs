@@ -72,7 +72,7 @@ public class DemoAgent : Agent
 
     void Update()
     {
-        if (obstacle.localPosition.z <= -10)
+        if (obstacle.localPosition.z <= -20)
         {
             Debug.Log("Obstacle success! +0.5f");
             AddReward(obstacleSuccessReward); // Medium +reward for successfully passing the obstacle
