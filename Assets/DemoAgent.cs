@@ -26,46 +26,47 @@ public class DemoAgent : Agent
         initialObstaclePosition = obstacle.transform.localPosition;
     }
 
-    private bool jump = true;
-    public float jumpForce;
-    [SerializeField] private GameObject prefabToSpawn;
     public override void OnEpisodeBegin()
     {
-        jump = true;
-
         this.transform.position = initialAgentPosition;
         obstacle.position = initialObstaclePosition;
+        canJump = true; // Reset canJump flag
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(this.transform.localPosition);
+        // No observations needed, as we only have discrete actions
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        if (actionBuffers.ContinuousActions[0] > 0 && jump)
+        // Take action from the agent
+        int action = Mathf.FloorToInt(actionBuffers.DiscreteActions[0]);
+
+        if (canJump && action == 1) // Jump action
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Acceleration);
-            jump = false;
+            Debug.Log("Jumped! " + jumpPenalty);
+            canJump = false;
+            AddReward(jumpPenalty); // Small -penalty for jumping
+           this.GetComponent<Rigidbody>()
+                .AddForce(
+                new Vector3(0, 7, 0),
+                ForceMode.Impulse
+            );
+        }
+        else
+        {
+            AddReward(jumpReward); // Small +reward for not jumping
         }
     }
 
-    private void OnCollisionStay(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Obstacle"))
+        if (collision.collider.tag.Contains("Obstacle"))
         {
-            AddReward(-1f);
+            Debug.Log("Touched obstacle! -1f");
+            AddReward(obstacleCollisionPenalty); // Large -penalty for colliding with obstacle
             EndEpisode();
-        }
-        else if (collision.gameObject.CompareTag("Coin"))
-        {
-            AddReward(1f);
-            Destroy(collision.gameObject);
-        }
-        if (collision.gameObject.CompareTag("Floor"))
-        {
-            jump = true;
         }
     }
 
@@ -74,23 +75,17 @@ public class DemoAgent : Agent
         if (obstacle.localPosition.z <= -10)
         {
             Debug.Log("Obstacle success! +0.5f");
-            AddReward(obstacleSuccessReward);
+            AddReward(obstacleSuccessReward); // Medium +reward for successfully passing the obstacle
 
             this.transform.position = initialAgentPosition;
             obstacle.position = initialObstaclePosition;
             canJump = true;
         }
-        if (this.transform.localPosition.y > 10)
-        {
-            Debug.Log("Jumped to high! +0.5f");
-            AddReward(-1);
-            EndEpisode();
-        }
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        var continuousActionsOut = actionsOut.ContinuousActions;
-        continuousActionsOut[0] = Input.GetAxis("Vertical");
+        var discreteActionsOut = actionsOut.DiscreteActions;
+        discreteActionsOut[0] = Input.GetKey(KeyCode.Space) ? 1 : 0; // Space key for jumping
     }
 }
