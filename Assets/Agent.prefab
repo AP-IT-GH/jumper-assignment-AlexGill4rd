@@ -184,11 +184,12 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 5000
-  Target: {fileID: 0}
-  GreenZone: {fileID: 0}
+  MaxStep: 100
   speedMultiplier: 0.1
-  rotationMultiplier: 5
+  jumpForce: 10
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &1013451209947733204
 MonoBehaviour:
   m_ObjectHideFlags: 0

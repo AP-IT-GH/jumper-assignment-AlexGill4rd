@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
@@ -7,52 +7,83 @@ using UnityEngine;
 
 public class DemoAgent : Agent
 {
-    public float speedMultiplier = 1;
-    public float jumpForce = 10f;
-    public LayerMask obstacleLayer;
-    RayPerceptionSensorComponent3D rayPerceptionSensor;
-    Rigidbody rb;
+    public Transform obstacle;
+
+    public float jumpReward = 0.1f; // Small +reward for not jumping
+    public float jumpPenalty = -0.1f; // Small -penalty for jumping
+    public float obstacleCollisionPenalty = -1.0f; // Large -penalty for colliding with obstacle
+    public float obstacleSuccessReward = 0.5f; // Medium +reward for successfully passing the obstacle
+
+    private Rigidbody rb;
+    private Vector3 initialAgentPosition;
+    private Vector3 initialObstaclePosition;
+    private bool canJump = true;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rayPerceptionSensor = GetComponent<RayPerceptionSensorComponent3D>();
+        initialAgentPosition = this.transform.position;
+        initialObstaclePosition = obstacle.transform.localPosition;
     }
 
+    private bool jump = true;
+    public float jumpForce;
+    [SerializeField] private GameObject prefabToSpawn;
     public override void OnEpisodeBegin()
     {
-        if (this.transform.localPosition.y < 0)
-        {
-            this.transform.localPosition = new Vector3(0, 0.5f, 3.29f);
-            this.transform.localRotation = Quaternion.identity;
-        }
+        jump = true;
+
+        this.transform.position = initialAgentPosition;
+        obstacle.position = initialObstaclePosition;
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        // Add observations from the Ray Perception Sensor 3D
-        sensor.AddObservation(rayPerceptionSensor.ObservationStacks);
+        sensor.AddObservation(this.transform.localPosition);
     }
 
-    public override void OnActionReceived(ActionBuffers actions)
+    public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        Vector3 controlSignal = Vector3.zero;
-        controlSignal.y = actions.ContinuousActions[0];
-        transform.Translate(controlSignal * speedMultiplier);
-
-        // Reward the agent based on the observation
-        if (GetCumulativeReward() <= 0f)
+        if (actionBuffers.ContinuousActions[0] > 0 && jump)
         {
-            SetReward(-0.001f);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Acceleration);
+            jump = false;
         }
-        else
-        {
-            SetReward(0.001f);
-        }
+    }
 
-        if (this.transform.localPosition.y < 0)
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Obstacle"))
         {
-            SetReward(-1f);
+            AddReward(-1f);
+            EndEpisode();
+        }
+        else if (collision.gameObject.CompareTag("Coin"))
+        {
+            AddReward(1f);
+            Destroy(collision.gameObject);
+        }
+        if (collision.gameObject.CompareTag("Floor"))
+        {
+            jump = true;
+        }
+    }
+
+    void Update()
+    {
+        if (obstacle.localPosition.z <= -10)
+        {
+            Debug.Log("Obstacle success! +0.5f");
+            AddReward(obstacleSuccessReward);
+
+            this.transform.position = initialAgentPosition;
+            obstacle.position = initialObstaclePosition;
+            canJump = true;
+        }
+        if (this.transform.localPosition.y > 10)
+        {
+            Debug.Log("Jumped to high! +0.5f");
+            AddReward(-1);
             EndEpisode();
         }
     }
@@ -61,6 +92,5 @@ public class DemoAgent : Agent
     {
         var continuousActionsOut = actionsOut.ContinuousActions;
         continuousActionsOut[0] = Input.GetAxis("Vertical");
-        continuousActionsOut[1] = Input.GetAxis("Horizontal");
     }
 }
