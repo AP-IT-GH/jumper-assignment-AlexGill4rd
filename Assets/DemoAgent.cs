@@ -5,9 +5,14 @@ using UnityEngine;
 public class DemoAgent : Agent
 {
     public float force = 15f;
-    public Transform reset = null;
-    public GameObject obstacle = null;
-    private Rigidbody rb = null;
+    public Transform reset;
+    public GameObject obstacle;
+    public GameObject coin;
+
+    private GameObject spawnedCoin;
+    private GameObject spawnedObstacle;
+
+    private Rigidbody rb;
 
     private Vector3 obstaclePos;
 
@@ -33,13 +38,28 @@ public class DemoAgent : Agent
     {
         ResetMyAgent();
     }
+    public void OnWallHit()
+    {
+        AddReward(0.5f);
+        ResetMyAgent();
+    }
+    public void OnWallHitCoin()
+    {
+        AddReward(-0.5f);
+        EndEpisode();
+    }
+    public void OnAgentHitCoin()
+    {
+        AddReward(1.0f);
+        ResetMyAgent();// Destroy the bar if it collides with a wall
+    }
+    public void OnAgentHit()
+    {
+        AddReward(-1.0f);
+        EndEpisode();
+    }
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Obstacle") == true)
-        {
-            AddReward(-1.0f);
-            EndEpisode();
-        }
         if (collision.gameObject.CompareTag("Floor"))
         {
             canJump = true;
@@ -52,8 +72,22 @@ public class DemoAgent : Agent
     }
     private void ResetMyAgent()
     {
+        Destroy(spawnedCoin);
+        Destroy(spawnedObstacle);
+        spawnedCoin = null;
+
         this.transform.position = new Vector3(reset.position.x, reset.position.y, reset.position.z);
-        this.obstacle.transform.position = obstaclePos;
+
+        bool spawnCoin = Random.value > 0.7f;
+
+        if (spawnCoin)
+        {
+            spawnedCoin = Instantiate(coin, obstaclePos, Quaternion.identity);
+        }
+        else
+        {
+            spawnedObstacle = Instantiate(obstacle, obstaclePos, Quaternion.identity);
+        }
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)

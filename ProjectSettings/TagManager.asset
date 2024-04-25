@@ -8,6 +8,8 @@ TagManager:
   - Floor
   - WallReward
   - Walltop
+  - Coin
+  - Agent
   layers:
   - Default
   - TransparentFX

@@ -13,11 +13,4 @@ public class WallRewardScript : MonoBehaviour
     {
 
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("Tester");
-        FindObjectOfType<DemoAgent>().GetComponent<DemoAgent>().AddReward(1f);
-        FindObjectOfType<DemoAgent>().GetComponent<DemoAgent>().EndEpisode();
-    }
 }
