@@ -1,8 +1,10 @@
 
 # Jumper Opdracht Documentatie
-Teamleden:
-Alex Gillard: s140270
+**Teamleden:**  
+Alex Gillard: s140270  
 Eyüpcan Cakir: s140705
+
+
 ## Overzicht:
 Deze opdracht bestaat uit het ontwikkelen van een zelflerende agent die geplaatst is op het midden van een kruispunt en moet leren om obstakels te vermijden die van twee verschillende richtingen kunnen komen. De agent leert om te springen over de obstakels door gebruik te maken van reinforcement learning technieken.
 
