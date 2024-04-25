@@ -15,7 +15,7 @@ Deze opdracht bestaat uit het ontwikkelen van een zelflerende agent die geplaats
 * **Doel**: De agent moet leren om obstakels effectief te ontwijken door eroverheen te springen.
 
 ## Agent Configuratie:
-config.yaml:
+**config.yaml**:
 
        behaviors:
           CubeAgent:
