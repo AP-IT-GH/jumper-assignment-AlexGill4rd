@@ -14,14 +14,16 @@ public class DemoAgent : Agent
 
     private Rigidbody rb;
 
-    private Vector3 obstaclePos;
+    private Vector3 obstaclePosLeft;
+    private Vector3 obstaclePosRight;
 
     bool canJump = true;
 
     public override void Initialize()
     {
         rb = this.GetComponent<Rigidbody>();
-        this.obstaclePos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z + 15);
+        this.obstaclePosLeft = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z + 15);
+        this.obstaclePosRight = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 15);
         ResetMyAgent();
         canJump = true;
     }
@@ -71,6 +73,7 @@ public class DemoAgent : Agent
     {
         rb.AddForce(Vector3.up * force, ForceMode.Acceleration);
     }
+    bool left = false;
     private void ResetMyAgent()
     {
         if (spawnedCoin != null)
@@ -81,15 +84,17 @@ public class DemoAgent : Agent
 
         this.transform.position = new Vector3(reset.position.x, reset.position.y, reset.position.z);
 
-        bool spawnCoin = Random.value > 0.7f;
-
-        if (spawnCoin)
+        if (left)
         {
-            spawnedCoin = Instantiate(coin, obstaclePos, Quaternion.identity, this.transform.parent);
+            spawnedObstacle = Instantiate(obstacle, obstaclePosLeft, Quaternion.identity, this.transform.parent);
+            spawnedObstacle.GetComponent<MoveBar>().back = true; 
+            left = false;
         }
         else
         {
-            spawnedObstacle = Instantiate(obstacle, obstaclePos, Quaternion.identity, this.transform.parent);
+            spawnedObstacle = Instantiate(obstacle, obstaclePosRight, Quaternion.identity, this.transform.parent);
+            spawnedObstacle.GetComponent<MoveBar>().back = false; 
+            left = true;
         }
     }
 

@@ -5,6 +5,7 @@ public class MoveBar : MonoBehaviour
 {
     public float speed = 5f; // Adjust this value to control the speed of the bar
     public float endPositionZ = -10f;
+    public bool back = true;
     private DemoAgent demoAgent;
 
     private void Start()
@@ -28,7 +29,10 @@ public class MoveBar : MonoBehaviour
     private void Update()
     {
         // Move the bar backwards at the specified speed
-        transform.Translate(Vector3.back * Mathf.Abs(speed) * Time.deltaTime);
+        if (back)
+            transform.Translate(Vector3.back * Mathf.Abs(speed) * Time.deltaTime);
+        else
+            transform.Translate(Vector3.forward * Mathf.Abs(speed) * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
