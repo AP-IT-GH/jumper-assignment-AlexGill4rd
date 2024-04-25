@@ -21,7 +21,7 @@ public class DemoAgent : Agent
     public override void Initialize()
     {
         rb = this.GetComponent<Rigidbody>();
-        this.obstaclePos = obstacle.transform.position;
+        this.obstaclePos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z + 15);
         ResetMyAgent();
         canJump = true;
     }
@@ -38,20 +38,21 @@ public class DemoAgent : Agent
     {
         ResetMyAgent();
     }
-    public void OnWallHit()
-    {
-        AddReward(0.5f);
-        ResetMyAgent();
-    }
+
     public void OnWallHitCoin()
     {
-        AddReward(-0.5f);
+        AddReward(-1f);
         EndEpisode();
     }
     public void OnAgentHitCoin()
     {
-        AddReward(1.0f);
+        AddReward(0.5f);
         ResetMyAgent();// Destroy the bar if it collides with a wall
+    }
+    public void OnWallHit()
+    {
+        AddReward(0.5f);
+        ResetMyAgent();
     }
     public void OnAgentHit()
     {
@@ -72,8 +73,10 @@ public class DemoAgent : Agent
     }
     private void ResetMyAgent()
     {
-        Destroy(spawnedCoin);
-        Destroy(spawnedObstacle);
+        if (spawnedCoin != null)
+            Destroy(spawnedCoin);
+        if (spawnedObstacle != null)
+            Destroy(spawnedObstacle);
         spawnedCoin = null;
 
         this.transform.position = new Vector3(reset.position.x, reset.position.y, reset.position.z);
@@ -82,11 +85,11 @@ public class DemoAgent : Agent
 
         if (spawnCoin)
         {
-            spawnedCoin = Instantiate(coin, obstaclePos, Quaternion.identity);
+            spawnedCoin = Instantiate(coin, obstaclePos, Quaternion.identity, this.transform.parent);
         }
         else
         {
-            spawnedObstacle = Instantiate(obstacle, obstaclePos, Quaternion.identity);
+            spawnedObstacle = Instantiate(obstacle, obstaclePos, Quaternion.identity, this.transform.parent);
         }
     }
 

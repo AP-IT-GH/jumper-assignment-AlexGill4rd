@@ -9,24 +9,38 @@ public class MoveCoin : MonoBehaviour
 
     private void Start()
     {
-        GameObject agentObject = GameObject.FindWithTag("Agent");
-        demoAgent = agentObject.GetComponent<DemoAgent>();
+        // Find the Agent GameObject within the same parent
+        Transform parent = transform.parent;
+        if (parent != null)
+        {
+            demoAgent = parent.GetComponentInChildren<DemoAgent>();
+            if (demoAgent == null)
+            {
+                Debug.LogError("No DemoAgent found in the current parent.");
+            }
+        }
+        else
+        {
+            Debug.LogError("MoveBar is not a child of any parent with an Agent.");
+        }
     }
 
     private void Update()
     {
+        // Move the bar backwards at the specified speed
         transform.Translate(Vector3.back * Mathf.Abs(speed) * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        // Trigger appropriate actions when colliding with specific tags
         if (other.CompareTag("WallReward"))
         {
-            demoAgent.OnWallHitCoin();
+            if (demoAgent != null) demoAgent.OnWallHitCoin();
         }
         if (other.CompareTag("Agent"))
         {
-            demoAgent.OnAgentHitCoin();
+            if (demoAgent != null) demoAgent.OnAgentHitCoin();
         }
     }
 }
