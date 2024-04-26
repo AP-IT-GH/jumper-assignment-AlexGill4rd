@@ -63,7 +63,7 @@ Deze opdracht bestaat uit het ontwikkelen van een zelflerende agent die geplaats
 -   **Start:** De agent begint met willekeurige acties met een beloning dicht bij nul.
 -   **Verloop:** Naarmate de training vordert, stijgt de gemiddelde beloning en verbetert de nauwkeurigheid van de agent in het ontwijken van obstakels.
 
-Na ongeveer 120.000 stappen tijdens de training begon onze agent een stuk sneller te leren. Ondanks dat hij grotere fouten maakte, was hij in staat om hier sneller van te leren en zijn gedrag aan te passen. Deze toename in leersnelheid deed ons denken dat de agent meer ervaring opdeed en beter in staat was om patronen in de omgeving te herkennen naarmate de training vorderde. Dit wijst erop dat een langere trainingsduur waarschijnlijk verdere verbeteringen zou opleveren, waarbij de agent zijn gedrag nog verder kan verbeteren en optimaliseren.
+Na ongeveer 200.000 stappen tijdens de training begon onze agent een stuk sneller te leren. Ondanks dat hij grotere fouten maakte, was hij in staat om hier sneller van te leren en zijn gedrag aan te passen. Deze toename in leersnelheid deed ons denken dat de agent meer ervaring opdeed en beter in staat was om patronen in de omgeving te herkennen naarmate de training vorderde. Dit wijst erop dat een langere trainingsduur waarschijnlijk verdere verbeteringen zou opleveren, waarbij de agent zijn gedrag nog verder kan verbeteren en optimaliseren.
 
 ## Resultaten:
 
