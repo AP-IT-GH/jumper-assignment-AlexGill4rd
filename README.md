@@ -1,4 +1,3 @@
-
 # Jumper Opdracht Documentatie
 **Teamleden:**  
 Alex Gillard: s140270  
@@ -73,6 +72,15 @@ Na 400.000 trainingstappen heeft de agent een gemiddelde beloning van 8.200 beha
 
 
 https://github.com/AP-IT-GH/jumper-assignment-AlexGillard-EyupcanCakir/assets/57497005/f4662d0b-4dc7-4b3c-8b2c-ec4ea2ffc813
+
+## Onze Configuratie
+### Agent
+![image](https://github.com/AP-IT-GH/jumper-assignment-AlexGillard-EyupcanCakir/assets/57497005/888a5905-3c84-4499-b6ba-0a7582a4cb81)
+![image](https://github.com/AP-IT-GH/jumper-assignment-AlexGillard-EyupcanCakir/assets/57497005/40b4c8eb-bf8d-44eb-9c10-d32529d6d7dc)
+![image](https://github.com/AP-IT-GH/jumper-assignment-AlexGillard-EyupcanCakir/assets/57497005/e176c7cd-1b95-4bcd-b009-077cea9f9ff9)
+
+### Red Bar
+![image](https://github.com/AP-IT-GH/jumper-assignment-AlexGillard-EyupcanCakir/assets/57497005/874ab6fc-fd94-4d6a-b1b9-adaeb0a145c6)
 
 
 ## Tutorial
