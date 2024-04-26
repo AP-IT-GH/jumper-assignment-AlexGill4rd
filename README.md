@@ -56,9 +56,10 @@ Deze opdracht bestaat uit het ontwikkelen van een zelflerende agent die geplaats
 
 ## Training:
 
--   **Visualisatie:** ![Screenshot 2024-04-25 231130](https://github.com/AP-IT-GH/jumper-assignment-AlexGillard-EyupcanCakir/assets/57497005/eb66647b-30a0-4edd-a3aa-19d6e8925445)
-![Screenshot 2024-04-25 231057](https://github.com/AP-IT-GH/jumper-assignment-AlexGillard-EyupcanCakir/assets/57497005/392e3b62-f829-4a99-bca2-a218cf0fa60b)![Screenshot 2024-04-25 231052](https://github.com/AP-IT-GH/jumper-assignment-AlexGillard-EyupcanCakir/assets/57497005/40791a81-f94a-4cf8-b2f6-657661fd636e)
+-   **Visualisatie:** ![image](https://github.com/AP-IT-GH/jumper-assignment-AlexGillard-EyupcanCakir/assets/57497005/afa21f49-0dac-4d9a-9939-3e62f7161f64)
 
+![image](https://github.com/AP-IT-GH/jumper-assignment-AlexGillard-EyupcanCakir/assets/57497005/8ac8bf55-9514-4839-a97d-73544f4ccef1)
+![image](https://github.com/AP-IT-GH/jumper-assignment-AlexGillard-EyupcanCakir/assets/57497005/5add8be9-604b-44f1-a5ef-aa6e8d02c6cf)
 
 -   **Start:** De agent begint met willekeurige acties met een beloning dicht bij nul.
 -   **Verloop:** Naarmate de training vordert, stijgt de gemiddelde beloning en verbetert de nauwkeurigheid van de agent in het ontwijken van obstakels.
@@ -67,7 +68,12 @@ Na ongeveer 120.000 stappen tijdens de training begon onze agent een stuk snelle
 
 ## Resultaten:
 
-Na 192.000 trainingstappen heeft de agent een gemiddelde beloning van 1,2 behaald. Tegen het einde van de training behaalde we een gemiddelde STD reward van zo'n 0,2.
+Na 400.000 trainingstappen heeft de agent een gemiddelde beloning van 8.200 behaald. Tegen het einde van de training behaalde we een gemiddelde STD reward van 0.
+![image](https://github.com/AP-IT-GH/jumper-assignment-AlexGillard-EyupcanCakir/assets/57497005/2d2dbd21-8fbd-4cde-adcd-32a0f1e947c1)
+
+
+https://github.com/AP-IT-GH/jumper-assignment-AlexGillard-EyupcanCakir/assets/57497005/f4662d0b-4dc7-4b3c-8b2c-ec4ea2ffc813
+
 
 ## Tutorial
 ### **Stap 1**: Agent Setup
